@@ -10,6 +10,8 @@ public class PlayerMovementHandle : MonoBehaviour
     [SerializeField] float rotationStrength = 100f;
     [SerializeField] float inputRotate;
     [SerializeField] Vector3 vector3InputRotate;
+
+    private AudioSource audioSource;
     private void OnEnable()
     {
         EnableInputAction();
@@ -17,6 +19,7 @@ public class PlayerMovementHandle : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
     private void FixedUpdate()
     {
@@ -28,8 +31,19 @@ public class PlayerMovementHandle : MonoBehaviour
     {
         if (thrust.IsPressed())
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
             rb.AddRelativeForce(Vector3.up * thrustStrength * Time.fixedDeltaTime);
         }
+        else
+        {
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }    
     }
     private void HandleRotation()
     {
